@@ -1,0 +1,26 @@
+{
+  "tabWidth": 4,
+  "printWidth": 120,
+  "trailingComma": "es5",
+  "overrides": [
+    {
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "eslint.config.mjs"
+      ],
+      "options": {
+        "singleQuote": true
+      }
+    },
+    {
+      "files": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
+}
