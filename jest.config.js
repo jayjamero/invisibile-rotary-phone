@@ -1,5 +1,6 @@
 module.exports = {
     preset: "ts-jest",
+    testEnvironment: "./src/test-utils/fix-js-dom-environment.ts",
     transform: {
         "^.+\\.(js|jsx|ts|tsx)$": [
             "babel-jest",
