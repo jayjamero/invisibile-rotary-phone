@@ -1,8 +1,9 @@
 'use client';
 
-import Image from 'next/image';
 import { Button, HStack } from '@chakra-ui/react';
 import { ColorModeButton } from '@/components/ui/color-mode';
+
+import Footer from '@/layout/Footer';
 import styles from './page.module.css';
 
 export default function Home() {
@@ -18,18 +19,16 @@ export default function Home() {
                     </Button>
                     <ColorModeButton />
                 </HStack>
-            </main>
-            <footer className={styles.footer}>
+                <br />
                 <a
-                    className={styles.primary}
                     href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    <Image className={styles.logo} src="/vercel.svg" alt="Vercel logomark" width={20} height={20} />
                     Deploy now
                 </a>
-            </footer>
+            </main>
+            <Footer />
         </div>
     );
 }
