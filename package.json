@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --config jest.config.js"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.22.0",
@@ -19,12 +20,18 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "babel-jest": "^30.0.4",
     "eslint": "^9",
     "eslint-config-next": "15.3.5",
+    "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.4",
     "prettier": "3.6.2",
+    "ts-jest": "^29.4.0",
     "typescript": "^5"
   }
 }
