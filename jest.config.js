@@ -21,4 +21,5 @@ module.exports = {
     },
     testPathIgnorePatterns: ["/node_modules/", "/dist/"],
     moduleFileExtensions: ["js", "ts", "tsx"],
+    setupFilesAfterEnv: ["./jest-setup.js"],
 };
