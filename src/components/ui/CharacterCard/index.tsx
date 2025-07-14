@@ -6,9 +6,10 @@ import { Character } from '@/lib/graphql/types';
 
 interface CharacterCardProps {
     character: Character;
+    onClick?: () => void;
 }
 
-const CharacterCard: React.FC<CharacterCardProps> = ({ character }) => {
+const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => {
     const getStatusColor = (status: Character['status']) => {
         switch (status) {
             case 'Alive':
@@ -21,7 +22,13 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character }) => {
     };
 
     return (
-        <Card.Root overflow="hidden">
+        <Card.Root
+            overflow="hidden"
+            cursor={onClick ? 'pointer' : 'default'}
+            onClick={onClick}
+            _hover={onClick ? { transform: 'translateY(-2px)', shadow: 'lg' } : {}}
+            transition="all 0.2s"
+        >
             <Image src={character.image} alt={character.name} width="100%" height="300px" objectFit="cover" />
             <Card.Body p={4}>
                 <VStack gap={2} align="start">
