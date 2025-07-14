@@ -35,7 +35,7 @@ describe('UserFormProvider', () => {
         localStorage.clear();
     });
 
-    test('should provide initial form data', () => {
+    it('should provide initial form data', () => {
         const { result } = renderHook(() => useUserForm(), { wrapper });
 
         expect(result.current.formData).toEqual({
@@ -45,7 +45,7 @@ describe('UserFormProvider', () => {
         expect(result.current.isValid).toBe(false);
     });
 
-    test('should update form fields', () => {
+    it('should update form fields', () => {
         const { result } = renderHook(() => useUserForm(), { wrapper });
 
         act(() => {
@@ -63,7 +63,7 @@ describe('UserFormProvider', () => {
         expect(result.current.isValid).toBe(true); // Now valid
     });
 
-    test('should validate form correctly', () => {
+    it('should validate form correctly', () => {
         const { result } = renderHook(() => useUserForm(), { wrapper });
 
         // Empty form should be invalid
@@ -88,7 +88,7 @@ describe('UserFormProvider', () => {
         expect(result.current.isValid).toBe(false);
     });
 
-    test('should reset form data', () => {
+    it('should reset form data', () => {
         const { result } = renderHook(() => useUserForm(), { wrapper });
 
         // Set some data
@@ -111,7 +111,7 @@ describe('UserFormProvider', () => {
         expect(result.current.isValid).toBe(false);
     });
 
-    test('should save to localStorage when saveToStorage is called', () => {
+    it('should save to localStorage when saveToStorage is called', () => {
         const { result } = renderHook(() => useUserForm(), { wrapper });
 
         act(() => {
@@ -126,7 +126,7 @@ describe('UserFormProvider', () => {
         expect(parsed.username).toBe('testuser');
     });
 
-    test('should not auto-save to localStorage when form data changes', () => {
+    it('should not auto-save to localStorage when form data changes', () => {
         const { result } = renderHook(() => useUserForm(), { wrapper });
 
         act(() => {
@@ -138,7 +138,7 @@ describe('UserFormProvider', () => {
         expect(stored).toBeNull();
     });
 
-    test('should load from localStorage on initialization', () => {
+    it('should load from localStorage on initialization', () => {
         // Pre-populate localStorage
         const testData: UserFormData = {
             username: 'storeduser',
@@ -153,7 +153,7 @@ describe('UserFormProvider', () => {
         expect(result.current.isValid).toBe(true);
     });
 
-    test('should clear localStorage', async () => {
+    it('should clear localStorage', async () => {
         const { result } = renderHook(() => useUserForm(), { wrapper });
 
         // Set some data and save it
@@ -179,7 +179,7 @@ describe('UserFormProvider', () => {
         });
     });
 
-    test('should handle localStorage errors gracefully', () => {
+    it('should handle localStorage errors gracefully', () => {
         // Mock localStorage to throw errors
         const originalSetItem = localStorage.setItem;
         localStorage.setItem = jest.fn(() => {
@@ -203,7 +203,7 @@ describe('UserFormProvider', () => {
         consoleSpy.mockRestore();
     });
 
-    test('should throw error when used outside provider', () => {
+    it('should throw error when used outside provider', () => {
         // Suppress console.error for this test
         const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 

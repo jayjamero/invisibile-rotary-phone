@@ -12,7 +12,7 @@ describe('FormModal', () => {
         localStorage.clear();
     });
 
-    test('renders trigger button and opens modal', async () => {
+    it('renders trigger button and opens modal', async () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
@@ -31,7 +31,7 @@ describe('FormModal', () => {
         });
     });
 
-    test('renders form fields when modal is open', async () => {
+    it('renders form fields when modal is open', async () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
@@ -48,7 +48,7 @@ describe('FormModal', () => {
         });
     });
 
-    test('submit button is disabled when form is invalid', async () => {
+    it('submit button is disabled when form is invalid', async () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
@@ -65,7 +65,7 @@ describe('FormModal', () => {
         });
     });
 
-    test('submit button is enabled when required fields are filled', async () => {
+    it('submit button is enabled when required fields are filled', async () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
@@ -94,7 +94,7 @@ describe('FormModal', () => {
         });
     });
 
-    test('modal closes when cancel button is clicked', async () => {
+    it('modal closes when cancel button is clicked', async () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
@@ -123,7 +123,7 @@ describe('FormModal', () => {
         });
     });
 
-    test('renders custom children in trigger', () => {
+    it('renders custom children in trigger', () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
