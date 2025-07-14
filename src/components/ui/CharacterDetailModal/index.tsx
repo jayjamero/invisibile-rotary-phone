@@ -22,20 +22,6 @@ const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({ character, 
         }
     }, [isOpen]);
 
-    // Handle keyboard navigation
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (!isOpen) return;
-
-            if (event.key === 'Escape') {
-                onClose();
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [isOpen, onClose]);
-
     if (!character) return null;
 
     const getStatusColor = (status: Character['status']) => {
