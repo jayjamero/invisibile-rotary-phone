@@ -3,7 +3,7 @@
 import { Button, HStack, VStack, Text, Box, Container, Flex } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, Suspense } from 'react';
 
 import { useUserForm } from '@/components/providers/FormProvider';
 import Header from '@/layout/Header';
@@ -12,7 +12,8 @@ import { UserFormTrigger } from '@/components/ui/FormModal';
 
 import styles from './page.module.css';
 
-export default function Home() {
+// Component that uses useSearchParams - needs to be wrapped in Suspense
+function HomeContent() {
     const { formData } = useUserForm();
     const searchParams = useSearchParams();
     const modalTriggerRef = useRef<HTMLDivElement>(null);
@@ -29,6 +30,7 @@ export default function Home() {
             }
         }
     }, [searchParams]);
+
     return (
         <div className={styles.page}>
             <Header />
@@ -52,24 +54,24 @@ export default function Home() {
                                 <VStack gap={3} textAlign="center">
                                     <Text>
                                         Wow, I really Cronenberged up the whole place, huh Morty? Just a bunch a
-                                        Cronenbergs walkin' around.
+                                        Cronenbergs walkin&apos; around.
                                     </Text>
 
                                     <Text>
-                                        Listen to your sister, Morty. To live is to risk it all, otherwise you're just
-                                        an inert chunk of randomly assembled molecules drifting wherever the universe
-                                        blows you.
+                                        Listen to your sister, Morty. To live is to risk it all, otherwise you&apos;re
+                                        just an inert chunk of randomly assembled molecules drifting wherever the
+                                        universe blows you.
                                     </Text>
 
                                     <Text>
-                                        He's not a hot girl. He can't just bail on his life and set up shop in someone
-                                        else's.
+                                        He&apos;s not a hot girl. He can&apos;t just bail on his life and set up shop in
+                                        someone else&apos;s.
                                     </Text>
 
                                     <Text>Weddings are basically funerals with cake.</Text>
 
                                     <Text>
-                                        You're missing the point Morty. Why would he drive a smaller toaster with
+                                        You&apos;re missing the point Morty. Why would he drive a smaller toaster with
                                         wheels? I mean, does your car look like a smaller version of your house? No.
                                     </Text>
                                 </VStack>
@@ -101,5 +103,13 @@ export default function Home() {
             </main>
             <Footer />
         </div>
+    );
+}
+
+export default function Home() {
+    return (
+        <Suspense>
+            <HomeContent />
+        </Suspense>
     );
 }
