@@ -1,14 +1,16 @@
 'use client';
 
 import { Button, HStack } from '@chakra-ui/react';
-import { ColorModeButton } from '@/components/ui/color-mode';
 
+import { ColorModeButton } from '@/components/ui/color-mode';
+import Header from '@/layout/Header';
 import Footer from '@/layout/Footer';
 import styles from './page.module.css';
 
 export default function Home() {
     return (
         <div className={styles.page}>
+            <Header />
             <main className={styles.main}>
                 <HStack>
                     <Button variant="outline" size="xl" onClick={() => window.alert('no!')}>
