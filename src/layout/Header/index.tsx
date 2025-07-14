@@ -2,6 +2,7 @@
 
 import { Box, Container, Flex, Text, Link, Image, Button, Stack } from '@chakra-ui/react';
 import { ColorModeButton } from '../../components/ui/ColorMode';
+import { UserFormTrigger } from '../../components/ui/FormModal';
 
 /* To aid in implementing the menu items in mobile drawer */
 const menuItems = (
@@ -13,21 +14,19 @@ const menuItems = (
                 </Text>
             </Link>
         </Button>
-        <Button asChild size="md" variant="surface" px={2} py={6} colorPalette="teal">
-            <Link href="/information">
+        <UserFormTrigger>
+            <Button size="md" variant="surface" px={2} py={6} colorPalette="teal">
                 <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="semibold">
                     Get Started
                 </Text>
-            </Link>
-        </Button>
+            </Button>
+        </UserFormTrigger>
         <ColorModeButton />
     </>
 );
 
 const Header = () => {
     return (
-        <Box w="full" boxShadow="md" display="flex" justifyContent="center">
-            <Container maxW="8xl" padding={{ base: '2', md: '4' }}>
         <Box bg={{ base: 'white', _dark: 'black' }} w="full" boxShadow="md" display="flex" justifyContent="center">
             <Container maxW="7xl" padding={{ base: '2', md: '4' }}>
                 <Flex justify="space-between" align="stretch">
