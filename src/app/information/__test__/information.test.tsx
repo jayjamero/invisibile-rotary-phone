@@ -116,7 +116,7 @@ describe('Information Page', () => {
         mockSearchParams.delete('page');
     });
 
-    test('renders information page title', () => {
+    it('renders information page title', () => {
         // Pre-populate localStorage with user data to prevent redirect
         const userData = {
             username: 'testuser',
@@ -133,7 +133,7 @@ describe('Information Page', () => {
         expect(screen.getByText('Character Information')).toBeInTheDocument();
     });
 
-    test('redirects to home with modal when no data exists', () => {
+    it('redirects to home with modal when no data exists', () => {
         render(
             <TestWrapper>
                 <Information />
@@ -148,7 +148,7 @@ describe('Information Page', () => {
         expect(screen.queryByText('User Profile')).not.toBeInTheDocument();
     });
 
-    test('shows user profile when data exists', () => {
+    it('shows user profile when data exists', () => {
         // Pre-populate localStorage with user data
         const userData = {
             username: 'testuser',
