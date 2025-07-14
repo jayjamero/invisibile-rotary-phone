@@ -36,7 +36,7 @@ const loadFromStorage = (): UserFormData => {
     return initialFormData;
 };
 
-const saveToStorage = (data: UserFormData): void => {
+const saveDataToStorage = (data: UserFormData): void => {
     if (typeof window === 'undefined') return;
 
     try {
@@ -52,6 +52,7 @@ interface UserFormContextType {
     updateField: (field: keyof UserFormData, value: string) => void;
     resetForm: () => void;
     clearStorage: () => void;
+    saveToStorage: (data?: UserFormData) => void;
     isValid: boolean;
 }
 
@@ -75,7 +76,6 @@ interface UserFormProviderProps {
 export const UserFormProvider: React.FC<UserFormProviderProps> = ({ children }) => {
     const [formData, setFormData] = useState<UserFormData>(initialFormData);
     const [isHydrated, setIsHydrated] = useState(false);
-    const [shouldSaveToStorage, setShouldSaveToStorage] = useState(true);
 
     // Load data from localStorage on mount
     useEffect(() => {
@@ -84,13 +84,7 @@ export const UserFormProvider: React.FC<UserFormProviderProps> = ({ children }) 
         setIsHydrated(true);
     }, []);
 
-    // Save to localStorage whenever formData changes (after initial hydration)
-    useEffect(() => {
-        if (isHydrated && shouldSaveToStorage) {
-            saveToStorage(formData);
-        }
-    }, [formData, isHydrated, shouldSaveToStorage]);
-
+    // Remove automatic saving - only save when explicitly called
     const updateField = useCallback((field: keyof UserFormData, value: string) => {
         setFormData((prev) => ({
             ...prev,
@@ -102,17 +96,33 @@ export const UserFormProvider: React.FC<UserFormProviderProps> = ({ children }) 
         setFormData(initialFormData);
     }, []);
 
+    const saveToStorage = useCallback((data?: UserFormData) => {
+        if (typeof window !== 'undefined') {
+            try {
+                if (data) {
+                    // Save the provided data and update state
+                    saveDataToStorage(data);
+                    setFormData(data);
+                } else {
+                    // Save current state data
+                    setFormData((currentData) => {
+                        saveDataToStorage(currentData);
+                        return currentData;
+                    });
+                }
+            } catch (error) {
+                console.warn('Failed to save form data to localStorage:', error);
+            }
+        }
+    }, []);
+
     const clearStorage = useCallback(() => {
         if (typeof window !== 'undefined') {
             try {
-                setShouldSaveToStorage(false);
                 localStorage.removeItem(FORM_STORAGE_KEY);
                 setFormData(initialFormData);
-                // Re-enable saving after clearing
-                setTimeout(() => setShouldSaveToStorage(true), 0);
             } catch (error) {
                 console.warn('Failed to clear form data from localStorage:', error);
-                setShouldSaveToStorage(true);
             }
         }
     }, []);
@@ -125,6 +135,7 @@ export const UserFormProvider: React.FC<UserFormProviderProps> = ({ children }) 
         updateField,
         resetForm,
         clearStorage,
+        saveToStorage,
         isValid,
     };
 
