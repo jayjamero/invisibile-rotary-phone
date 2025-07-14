@@ -2,6 +2,8 @@
 
 A modern React application built with Next.js that displays Rick and Morty characters using the Rick and Morty API. Features a responsive design, accessibility-first approach, and comprehensive testing suite.
 
+This was a fun project, but did take me abit of time to get used to NextJS as well as the UI library, [see my Project Summary here](https://github.com/jayjamero/invisibile-rotary-phone/blob/main/docs/project-summary.md).
+
 ## 🚀 Features
 
 - **Character Browser**: Browse Rick and Morty characters with pagination
