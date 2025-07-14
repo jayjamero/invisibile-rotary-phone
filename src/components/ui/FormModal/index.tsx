@@ -3,7 +3,7 @@
 import { Dialog, Portal, Button, Field, Input, VStack, HStack, useDisclosure } from '@chakra-ui/react';
 import { LuX } from 'react-icons/lu';
 import { useState, useEffect } from 'react';
-import { useUserForm } from '../FormProvider';
+import { useUserForm } from '../../providers/FormProvider';
 
 // Separate trigger component that can be used anywhere
 export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ children }) => {

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { Provider as ThemeProvider } from '@/components/ui/ThemeProvider';
-import { UserFormProvider } from '@/components/ui/FormProvider';
+import { Provider as ThemeProvider } from '@/components/providers/ThemeProvider';
+import { UserFormProvider } from '@/components/providers/FormProvider';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 

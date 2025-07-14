@@ -1,7 +1,7 @@
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { render } from '../../../../test-utils/render';
 import { UserFormTrigger } from '../index';
-import { UserFormProvider } from '../../FormProvider';
+import { UserFormProvider } from '../../../providers/FormProvider';
 
 // Wrapper component with form provider
 const TestWrapper = ({ children }: { children: React.ReactNode }) => <UserFormProvider>{children}</UserFormProvider>;

@@ -1,4 +1,4 @@
-import { Provider as ThemeProvider } from '../components/ui/ThemeProvider';
+import { Provider as ThemeProvider } from '../components/providers/ThemeProvider';
 import { render as rtlRender } from '@testing-library/react';
 
 export function render(ui: React.ReactNode) {
