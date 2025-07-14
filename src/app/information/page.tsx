@@ -1,6 +1,6 @@
 'use client';
 
-import { VStack, Text, Box, Container, SimpleGrid, Heading } from '@chakra-ui/react';
+import { VStack, Text, Box, Container, Heading, Flex } from '@chakra-ui/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
 import { useUserForm } from '@/components/providers/FormProvider';
@@ -98,80 +98,56 @@ function InformationContent() {
                             {/* Rick and Morty Characters Section */}
                             <Box width="100%" maxW="6xl" as="section" aria-labelledby="characters-heading">
                                 <VStack gap={6} align="left">
-                                    <Heading as="h2" size="xl" textAlign="left" id="characters-heading">
+                                    <Heading as="h2" size="xl" textAlign="center" id="characters-heading">
                                         Rick and Morty Characters
                                     </Heading>
 
-                                    {charactersError && (
-                                        <Text color="red.500" textAlign="center" role="alert" aria-live="assertive">
-                                            Error loading characters: {charactersError.message}
-                                        </Text>
-                                    )}
-
-                                    {/* Show skeleton loaders when loading */}
                                     {charactersLoading && (
-                                        <SimpleGrid
-                                            columns={{ base: 1, md: 2, lg: 3 }}
-                                            gap={6}
-                                            width="100%"
-                                            role="status"
-                                            aria-label="Loading characters"
-                                        >
-                                            <SkeletonCard count={6} />
-                                        </SimpleGrid>
-                                    )}
-
-                                    {/* Show real data when available */}
-                                    {!charactersLoading && charactersData?.characters.results && (
-                                        <SimpleGrid
-                                            columns={{ base: 1, md: 2, lg: 3 }}
-                                            gap={6}
-                                            width="100%"
-                                            role="grid"
-                                            aria-label={`Grid of ${charactersData.characters.results.length} Rick and Morty characters`}
-                                        >
-                                            {charactersData.characters.results.slice(0, 6).map((character) => (
-                                                <CharacterCard
-                                                    key={character.id}
-                                                    character={character}
-                                                    onClick={() => handleCharacterClick(character)}
-                                                />
-                                            ))}
-                                        </SimpleGrid>
-                                    )}
-
-                                    {/* Pagination Controls */}
-                                    {charactersData &&
-                                        !charactersLoading &&
-                                        charactersData.characters.info.pages > 1 && (
-                                            <VStack gap={4} align="center">
-                                                <PaginationControls
-                                                    currentPage={currentPage}
-                                                    totalPages={charactersData.characters.info.pages}
-                                                    info={charactersData.characters.info}
-                                                    onPageChange={handlePageChange}
-                                                />
-                                                <Text
-                                                    fontSize="xs"
-                                                    color="gray.500"
-                                                    textAlign="center"
-                                                    aria-label={`Current page ${currentPage} of ${charactersData.characters.info.pages} pages`}
-                                                >
-                                                    Page {currentPage} of {charactersData.characters.info.pages}
-                                                </Text>
-                                            </VStack>
-                                        )}
-
-                                    {charactersData && !charactersLoading && (
-                                        <Text
-                                            fontSize="sm"
-                                            color="gray.600"
-                                            textAlign="center"
+                                        <Flex
+                                            wrap="wrap"
+                                            gap="6"
+                                            justify="center"
                                             role="status"
                                             aria-live="polite"
+                                            aria-label="Loading characters"
                                         >
-                                            Showing 6 of {charactersData.characters.info.count} characters
-                                        </Text>
+                                            {Array.from({ length: 20 }).map((_, index) => (
+                                                <SkeletonCard key={index} />
+                                            ))}
+                                        </Flex>
+                                    )}
+
+                                    {charactersError && (
+                                        <Box textAlign="center" p={8} role="alert" aria-live="assertive" as="aside">
+                                            <Text color="red.500" fontSize="lg">
+                                                Error loading characters: {charactersError.message}
+                                            </Text>
+                                        </Box>
+                                    )}
+
+                                    {charactersData?.characters && (
+                                        <>
+                                            <main role="main" aria-label="Characters list">
+                                                <Flex wrap="wrap" gap="6" justify="center">
+                                                    {charactersData.characters.results.map((character) => (
+                                                        <CharacterCard
+                                                            key={character.id}
+                                                            character={character}
+                                                            onClick={() => handleCharacterClick(character)}
+                                                        />
+                                                    ))}
+                                                </Flex>
+                                            </main>
+
+                                            <nav role="navigation" aria-label="Pagination">
+                                                <PaginationControls
+                                                    currentPage={currentPage}
+                                                    info={charactersData.characters.info}
+                                                    totalPages={charactersData.characters.info.pages}
+                                                    onPageChange={handlePageChange}
+                                                />
+                                            </nav>
+                                        </>
                                     )}
                                 </VStack>
                             </Box>
