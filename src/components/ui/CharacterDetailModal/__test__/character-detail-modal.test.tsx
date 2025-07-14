@@ -76,7 +76,7 @@ describe('CharacterDetailModal', () => {
         expect(getByText('Rick Sanchez')).toBeInTheDocument();
 
         // Check if character image is displayed
-        expect(getByAltText('Rick Sanchez')).toBeInTheDocument();
+        expect(getByAltText('Portrait of Rick Sanchez, a alive human')).toBeInTheDocument();
 
         // Check if status badge is displayed
         expect(getByText('Alive')).toBeInTheDocument();
@@ -300,7 +300,7 @@ describe('CharacterDetailModal', () => {
 
         // Check for image alt text
         const characterImage = getByRole('img');
-        expect(characterImage).toHaveAttribute('alt', 'Rick Sanchez');
+        expect(characterImage).toHaveAttribute('alt', 'Portrait of Rick Sanchez, a alive human');
     });
 
     it('renders responsive grid layout', () => {
@@ -311,5 +311,67 @@ describe('CharacterDetailModal', () => {
         // Check if grid container exists
         const gridContainer = container.querySelector('[class*="css"]');
         expect(gridContainer).toBeInTheDocument();
+    });
+
+    // Additional accessibility tests
+    it('has proper ARIA labels and roles', () => {
+        const { getByRole, getByLabelText } = render(
+            <CharacterDetailModal character={mockCharacter} isOpen={true} onClose={mockOnClose} />
+        );
+
+        // Check modal has proper dialog role
+        expect(getByRole('dialog')).toBeInTheDocument();
+
+        // Check character information region
+        expect(getByRole('region', { name: 'Character information' })).toBeInTheDocument();
+
+        // Check episodes list
+        expect(getByRole('list', { name: 'List of 2 episodes featuring Rick Sanchez' })).toBeInTheDocument();
+
+        // Check status badge aria-label
+        expect(getByLabelText('Status: Alive')).toBeInTheDocument();
+
+        // Check species badge aria-label
+        expect(getByLabelText('Species: Human')).toBeInTheDocument();
+
+        // Check gender badge aria-label
+        expect(getByLabelText('Gender: Male')).toBeInTheDocument();
+    });
+
+    it('has proper heading structure', () => {
+        const { container } = render(
+            <CharacterDetailModal character={mockCharacter} isOpen={true} onClose={mockOnClose} />
+        );
+
+        // Check for proper heading elements
+        const headings = container.querySelectorAll('h2, h3');
+        expect(headings.length).toBeGreaterThan(0);
+
+        // Check modal title is h2
+        const modalTitle = container.querySelector('#character-modal-title');
+        expect(modalTitle?.tagName).toBe('H2');
+
+        // Check section headings are h3
+        const sectionHeadings = container.querySelectorAll('h3');
+        expect(sectionHeadings.length).toBeGreaterThan(3);
+    });
+
+    it('provides descriptive close button label', () => {
+        const { getByLabelText } = render(
+            <CharacterDetailModal character={mockCharacter} isOpen={true} onClose={mockOnClose} />
+        );
+
+        expect(getByLabelText('Close Rick Sanchez character details modal')).toBeInTheDocument();
+    });
+
+    it('has focusable episode items for keyboard navigation', () => {
+        const { container } = render(
+            <CharacterDetailModal character={mockCharacter} isOpen={true} onClose={mockOnClose} />
+        );
+
+        const episodeItems = container.querySelectorAll('[role="listitem"]');
+        episodeItems.forEach((item) => {
+            expect(item).toHaveAttribute('tabindex', '0');
+        });
     });
 });
