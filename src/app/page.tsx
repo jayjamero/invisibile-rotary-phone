@@ -1,7 +1,11 @@
 'use client';
 
 import { Button, HStack, VStack, Text, Box, Container, Flex } from '@chakra-ui/react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
+import { useUserForm } from '@/components/ui/FormProvider';
 import Header from '@/layout/Header';
 import Footer from '@/layout/Footer';
 import { UserFormTrigger } from '@/components/ui/FormModal';
@@ -9,6 +13,22 @@ import { UserFormTrigger } from '@/components/ui/FormModal';
 import styles from './page.module.css';
 
 export default function Home() {
+    const { formData } = useUserForm();
+    const searchParams = useSearchParams();
+    const modalTriggerRef = useRef<HTMLDivElement>(null);
+    const hasUserData = formData.username.trim() !== '' && formData.jobTitle.trim() !== '';
+
+    // Auto-open modal if openModal=true in URL
+    useEffect(() => {
+        const openModal = searchParams.get('openModal');
+        if (openModal === 'true' && modalTriggerRef.current) {
+            // Find the button inside the trigger and click it
+            const button = modalTriggerRef.current.querySelector('button');
+            if (button) {
+                button.click();
+            }
+        }
+    }, [searchParams]);
     return (
         <div className={styles.page}>
             <Header />
@@ -56,13 +76,25 @@ export default function Home() {
                             </VStack>
                         </Flex>
                         <VStack mt={10} align="center">
-                            <UserFormTrigger>
-                                <Button size="md" variant="surface" px={2} py={6} colorPalette="teal">
-                                    <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="semibold">
-                                        Find out more
-                                    </Text>
+                            {hasUserData ? (
+                                <Button asChild size="md" variant="surface" px={2} py={6} colorPalette="teal">
+                                    <Link href="/information">
+                                        <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="semibold">
+                                            Welcome back {formData.username}
+                                        </Text>
+                                    </Link>
                                 </Button>
-                            </UserFormTrigger>
+                            ) : (
+                                <div ref={modalTriggerRef}>
+                                    <UserFormTrigger>
+                                        <Button size="md" variant="surface" px={2} py={6} colorPalette="teal">
+                                            <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="semibold">
+                                                Get Started
+                                            </Text>
+                                        </Button>
+                                    </UserFormTrigger>
+                                </div>
+                            )}
                         </VStack>
                     </Container>
                 </Box>
