@@ -68,7 +68,7 @@ function InformationContent() {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
             <Header />
             <main id="main-content" style={{ flex: 1 }} role="main" aria-label="Character information page">
                 <Box
