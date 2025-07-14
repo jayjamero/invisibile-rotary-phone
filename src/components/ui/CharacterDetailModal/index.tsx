@@ -49,12 +49,17 @@ const CharacterDetailModal: React.FC<CharacterDetailModalProps> = ({ character, 
     };
 
     return (
-        <Dialog.Root open={isOpen} onOpenChange={({ open }) => !open && onClose()} placement="center">
+        <Dialog.Root
+            open={isOpen}
+            onOpenChange={({ open }) => !open && onClose()}
+            placement="center"
+            motionPreset="slide-in-bottom"
+        >
             <Dialog.Backdrop />
             <Dialog.Positioner>
                 <Dialog.Content
                     maxW="4xl"
-                    p={0}
+                    m="auto"
                     role="dialog"
                     aria-labelledby="character-modal-title"
                     aria-describedby="character-modal-description"
