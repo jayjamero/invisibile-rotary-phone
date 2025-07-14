@@ -54,6 +54,7 @@ interface UserFormContextType {
     clearStorage: () => void;
     saveToStorage: (data?: UserFormData) => void;
     isValid: boolean;
+    isHydrated: boolean;
 }
 
 // Create context
@@ -137,6 +138,7 @@ export const UserFormProvider: React.FC<UserFormProviderProps> = ({ children }) 
         clearStorage,
         saveToStorage,
         isValid,
+        isHydrated,
     };
 
     return <UserFormContext.Provider value={value}>{children}</UserFormContext.Provider>;
