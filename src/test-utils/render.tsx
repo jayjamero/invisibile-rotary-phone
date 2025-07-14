@@ -1,4 +1,4 @@
-import { Provider } from '../components/ui/provider';
+import { Provider } from '../components/ui/Provider';
 import { render as rtlRender } from '@testing-library/react';
 
 export function render(ui: React.ReactNode) {

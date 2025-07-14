@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Container, Flex, Text, Link, Image, Button, Stack } from '@chakra-ui/react';
-import { ColorModeButton } from '../../components/ui/color-mode';
+import { ColorModeButton } from '../../components/ui/ColorMode';
 
 /* To aid in implementing the menu items in mobile drawer */
 const menuItems = (
