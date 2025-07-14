@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import { render } from '../../../test-utils/render';
-import { UserFormProvider } from '../../../components/ui/FormProvider';
+import { UserFormProvider } from '../../../components/providers/FormProvider';
 import Header from '../';
 
 describe('Header', () => {

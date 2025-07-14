@@ -3,7 +3,7 @@
 import { Box, Container, Flex, Text, Link, Image, Button, Stack } from '@chakra-ui/react';
 import { ColorModeButton } from '../../components/ui/ColorMode';
 import { UserFormTrigger } from '../../components/ui/FormModal';
-import { useUserForm } from '../../components/ui/FormProvider';
+import { useUserForm } from '../../components/providers/FormProvider';
 
 /* Component for conditional button text */
 const ConditionalFormButton = () => {

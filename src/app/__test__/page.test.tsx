@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { render } from '../../test-utils/render';
 import Home from '../page';
-import { UserFormProvider } from '@/components/ui/FormProvider';
+import { UserFormProvider } from '@/components/providers/FormProvider';
 
 // Mock Next.js navigation
 const mockPush = jest.fn();
