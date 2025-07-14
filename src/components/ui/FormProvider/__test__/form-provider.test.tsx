@@ -111,11 +111,12 @@ describe('UserFormProvider', () => {
         expect(result.current.isValid).toBe(false);
     });
 
-    test('should save to localStorage when form data changes', () => {
+    test('should save to localStorage when saveToStorage is called', () => {
         const { result } = renderHook(() => useUserForm(), { wrapper });
 
         act(() => {
             result.current.updateField('username', 'testuser');
+            result.current.saveToStorage(); // Explicitly save
         });
 
         // Check localStorage was updated
@@ -123,6 +124,18 @@ describe('UserFormProvider', () => {
         expect(stored).toBeTruthy();
         const parsed = JSON.parse(stored!);
         expect(parsed.username).toBe('testuser');
+    });
+
+    test('should not auto-save to localStorage when form data changes', () => {
+        const { result } = renderHook(() => useUserForm(), { wrapper });
+
+        act(() => {
+            result.current.updateField('username', 'testuser');
+        });
+
+        // Check localStorage was NOT automatically updated
+        const stored = localStorage.getItem('userFormData');
+        expect(stored).toBeNull();
     });
 
     test('should load from localStorage on initialization', () => {
@@ -143,10 +156,11 @@ describe('UserFormProvider', () => {
     test('should clear localStorage', async () => {
         const { result } = renderHook(() => useUserForm(), { wrapper });
 
-        // Set some data
+        // Set some data and save it
         act(() => {
             result.current.updateField('username', 'testuser');
             result.current.updateField('jobTitle', 'Developer');
+            result.current.saveToStorage(); // Explicitly save first
         });
 
         // Verify data is in localStorage
@@ -157,12 +171,8 @@ describe('UserFormProvider', () => {
             result.current.clearStorage();
         });
 
-        // Wait for the setTimeout to complete
-        await waitFor(() => {
-            expect(localStorage.getItem('userFormData')).toBeNull();
-        });
-
-        // Verify form is reset
+        // Verify localStorage is cleared and form is reset
+        expect(localStorage.getItem('userFormData')).toBeNull();
         expect(result.current.formData).toEqual({
             username: '',
             jobTitle: '',
@@ -182,6 +192,7 @@ describe('UserFormProvider', () => {
 
         act(() => {
             result.current.updateField('username', 'testuser');
+            result.current.saveToStorage(); // Explicitly save to trigger error
         });
 
         // Should not throw error, but log warning
