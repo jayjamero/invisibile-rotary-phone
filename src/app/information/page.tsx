@@ -1,18 +1,37 @@
 'use client';
 
-import { Button, VStack, Text, Box, Container, HStack, Card } from '@chakra-ui/react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { VStack, Text, Box, Container, SimpleGrid } from '@chakra-ui/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
 import { useUserForm } from '@/components/providers/FormProvider';
+import { useCharacters } from '@/hooks/useRickAndMorty';
+import { parsePageFromUrl, generatePageUrl } from '@/components/ui/PaginationControls/pagination';
 import Header from '@/layout/Header';
 import Footer from '@/layout/Footer';
-import { UserFormTrigger } from '@/components/ui/FormModal';
+import CharacterCard from '@/components/ui/CharacterCard';
+import SkeletonCard from '@/components/ui/SkeletonCard';
+import PaginationControls from '@/components/ui/PaginationControls';
 
-export default function Information() {
+function InformationContent() {
     const { formData, isHydrated } = useUserForm();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const hasUserData = formData.username.trim() !== '' && formData.jobTitle.trim() !== '';
+
+    // Get initial page from URL or default to 1
+    const pageFromUrl = parsePageFromUrl(searchParams.get('page'));
+    const [currentPage, setCurrentPage] = useState(pageFromUrl);
+
+    // Fetch Rick and Morty characters data
+    const { data: charactersData, loading: charactersLoading, error: charactersError } = useCharacters(currentPage);
+
+    // Sync state with URL changes
+    useEffect(() => {
+        const urlPage = parsePageFromUrl(searchParams.get('page'));
+        if (urlPage !== currentPage) {
+            setCurrentPage(urlPage);
+        }
+    }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Redirect to home if no user data (only after hydration is complete)
     useEffect(() => {
@@ -26,6 +45,12 @@ export default function Information() {
         return null;
     }
 
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        const newUrl = generatePageUrl(page);
+        router.push(newUrl);
+    };
+
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />
@@ -35,9 +60,9 @@ export default function Information() {
                     display="flex"
                     justifyContent="center"
                     padding={{ base: '6', md: '10' }}
-                    minHeight="calc(100vh - 200px)"
+                    margin={{ base: '0', md: '0' }}
                 >
-                    <Container maxW="4xl">
+                    <Container maxW="8xl">
                         <VStack gap={8} align="center">
                             <Text fontSize="3xl" fontWeight="bold" textAlign="center">
                                 Information Page
@@ -47,47 +72,72 @@ export default function Information() {
                                 Welcome, {formData.username}!
                             </Text>
 
-                            <Card.Root width="100%" maxW="md" p={6}>
-                                <Card.Header>
-                                    <Text fontSize="xl" fontWeight="semibold" textAlign="center">
-                                        User Profile
+                            {/* Rick and Morty Characters Section */}
+                            <Box width="100%" maxW="6xl">
+                                <VStack gap={6} align="left">
+                                    <Text fontSize="2xl" fontWeight="bold" textAlign="left">
+                                        Rick and Morty Characters
                                     </Text>
-                                </Card.Header>
-                                <Card.Body>
-                                    <VStack gap={4} align="stretch">
-                                        <Box>
-                                            <Text fontSize="sm" color="gray.600" fontWeight="medium">
-                                                Username:
-                                            </Text>
-                                            <Text fontSize="lg" fontWeight="semibold">
-                                                {formData.username}
-                                            </Text>
-                                        </Box>
-                                        <Box>
-                                            <Text fontSize="sm" color="gray.600" fontWeight="medium">
-                                                Job Title:
-                                            </Text>
-                                            <Text fontSize="lg" fontWeight="semibold">
-                                                {formData.jobTitle}
-                                            </Text>
-                                        </Box>
-                                    </VStack>
-                                </Card.Body>
-                                <Card.Footer>
-                                    <HStack justify="center" width="100%">
-                                        <UserFormTrigger>
-                                            <Button colorPalette="teal" size="md">
-                                                Edit Profile
-                                            </Button>
-                                        </UserFormTrigger>
-                                    </HStack>
-                                </Card.Footer>
-                            </Card.Root>
+
+                                    {charactersError && (
+                                        <Text color="red.500" textAlign="center">
+                                            Error loading characters: {charactersError.message}
+                                        </Text>
+                                    )}
+
+                                    {/* Show skeleton loaders when loading */}
+                                    {charactersLoading && (
+                                        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6} width="100%">
+                                            <SkeletonCard count={6} />
+                                        </SimpleGrid>
+                                    )}
+
+                                    {/* Show real data when available */}
+                                    {!charactersLoading && charactersData?.characters.results && (
+                                        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6} width="100%">
+                                            {charactersData.characters.results.slice(0, 6).map((character) => (
+                                                <CharacterCard key={character.id} character={character} />
+                                            ))}
+                                        </SimpleGrid>
+                                    )}
+
+                                    {/* Pagination Controls */}
+                                    {charactersData &&
+                                        !charactersLoading &&
+                                        charactersData.characters.info.pages > 1 && (
+                                            <VStack gap={4} align="center">
+                                                <PaginationControls
+                                                    currentPage={currentPage}
+                                                    totalPages={charactersData.characters.info.pages}
+                                                    info={charactersData.characters.info}
+                                                    onPageChange={handlePageChange}
+                                                />
+                                                <Text fontSize="xs" color="gray.500" textAlign="center">
+                                                    Page {currentPage} of {charactersData.characters.info.pages}
+                                                </Text>
+                                            </VStack>
+                                        )}
+
+                                    {charactersData && !charactersLoading && (
+                                        <Text fontSize="sm" color="gray.600" textAlign="center">
+                                            Showing 6 of {charactersData.characters.info.count} characters
+                                        </Text>
+                                    )}
+                                </VStack>
+                            </Box>
                         </VStack>
                     </Container>
                 </Box>
             </main>
             <Footer />
         </div>
+    );
+}
+
+export default function Information() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <InformationContent />
+        </Suspense>
     );
 }
