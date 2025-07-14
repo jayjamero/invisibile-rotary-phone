@@ -1,6 +1,6 @@
 'use client';
 
-import { Dialog, Portal, Button, Field, Input, VStack, HStack, useDisclosure } from '@chakra-ui/react';
+import { Dialog, Button, Field, Input, VStack, useDisclosure } from '@chakra-ui/react';
 import { LuX } from 'react-icons/lu';
 import { useState, useEffect } from 'react';
 import { useUserForm } from '../../providers/FormProvider';
@@ -8,7 +8,7 @@ import { useUserForm } from '../../providers/FormProvider';
 // Separate trigger component that can be used anywhere
 export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     const { open, onOpen, onClose } = useDisclosure();
-    const { formData, updateField, resetForm, saveToStorage, clearStorage } = useUserForm();
+    const { formData, resetForm, saveToStorage, clearStorage } = useUserForm();
 
     // Local state for form inputs
     const [localUsername, setLocalUsername] = useState('');
@@ -31,9 +31,6 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
         const savedData = localStorage.getItem('userFormData');
         setHasSavedData(!!savedData);
     }, [formData, open]); // Re-check when formData changes or modal opens
-
-    // Check if both local fields are filled (user is editing)
-    const hasLocalData = localUsername.trim() !== '' && localJobTitle.trim() !== '';
 
     const isViewMode = hasSavedData;
 

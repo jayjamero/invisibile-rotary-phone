@@ -51,7 +51,7 @@ export const useRandomCharacters = () => {
     return useQuery<CharactersResponse>(GET_CHARACTERS, {
         variables: {
             filter: {
-                name: randomIds.map((id) => `Rick,Morty,Summer,Beth,Jerry`).join(','),
+                name: randomIds.map(() => `Rick,Morty,Summer,Beth,Jerry`).join(','),
             },
         },
         errorPolicy: 'all',
