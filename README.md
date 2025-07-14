@@ -153,8 +153,7 @@ leonardo-challenge-mero/
 │   │   └── useRickAndMorty.ts # Rick and Morty API hook
 │   ├── layout/                # Layout components
 │   │   ├── Header/            # Site header
-│   │   ├── Footer/            # Site footer
-│   │   └── PageContainer/     # Page wrapper
+│   │   └── Footer/            # Site footer
 │   ├── lib/                   # Libraries and utilities
 │   │   ├── apollo-client.ts   # Apollo GraphQL client
 │   │   └── graphql/           # GraphQL queries and types
