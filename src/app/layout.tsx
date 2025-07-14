@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { Provider } from '@/components/ui/ThemeProvider';
+import { Provider as ThemeProvider } from '@/components/ui/ThemeProvider';
+import { UserFormProvider } from '@/components/ui/FormProvider';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
@@ -26,7 +27,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                <Provider>{children}</Provider>
+                <ThemeProvider>
+                    <UserFormProvider>{children}</UserFormProvider>
+                </ThemeProvider>
             </body>
         </html>
     );
