@@ -3,6 +3,23 @@
 import { Box, Container, Flex, Text, Link, Image, Button, Stack } from '@chakra-ui/react';
 import { ColorModeButton } from '../../components/ui/ColorMode';
 import { UserFormTrigger } from '../../components/ui/FormModal';
+import { useUserForm } from '../../components/ui/FormProvider';
+
+/* Component for conditional button text */
+const ConditionalFormButton = () => {
+    const { formData } = useUserForm();
+    const hasUserData = formData.username.trim() !== '' && formData.jobTitle.trim() !== '';
+
+    return (
+        <UserFormTrigger>
+            <Button size="md" variant="surface" px={2} py={6} colorPalette="teal">
+                <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="semibold">
+                    {hasUserData ? 'View Profile' : 'Get Started'}
+                </Text>
+            </Button>
+        </UserFormTrigger>
+    );
+};
 
 /* To aid in implementing the menu items in mobile drawer */
 const menuItems = (
@@ -14,13 +31,7 @@ const menuItems = (
                 </Text>
             </Link>
         </Button>
-        <UserFormTrigger>
-            <Button size="md" variant="surface" px={2} py={6} colorPalette="teal">
-                <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight="semibold">
-                    Get Started
-                </Text>
-            </Button>
-        </UserFormTrigger>
+        <ConditionalFormButton />
         <ColorModeButton />
     </>
 );
