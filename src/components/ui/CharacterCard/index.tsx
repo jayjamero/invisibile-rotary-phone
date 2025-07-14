@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, VStack, Text, HStack, Card, Image } from '@chakra-ui/react';
+import { Box, VStack, Text, Card, Image } from '@chakra-ui/react';
 import { Character } from '@/lib/graphql/types';
 
 interface CharacterCardProps {
@@ -49,48 +49,59 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => 
                 outlineColor: 'blue.500',
                 outlineOffset: '2px',
             }}
+            as="article"
+            aria-labelledby={`character-${character.id}-name`}
         >
-            <Image
-                src={character.image}
-                alt={`Portrait of ${character.name}, a ${character.status.toLowerCase()} ${character.species.toLowerCase()}`}
-                width="100%"
-                height="300px"
-                objectFit="cover"
-                loading="lazy"
-            />
+            <figure>
+                <Image
+                    src={character.image}
+                    alt={`Portrait of ${character.name}, a ${character.status.toLowerCase()} ${character.species.toLowerCase()}`}
+                    width="100%"
+                    height="300px"
+                    objectFit="cover"
+                    loading="lazy"
+                />
+            </figure>
             <Card.Body p={4}>
                 <VStack gap={2} align="start" id={`character-${character.id}-description`}>
-                    <Text fontSize="lg" fontWeight="bold" as="h3" aria-label={`Character name: ${character.name}`}>
+                    <Text
+                        fontSize="lg"
+                        fontWeight="bold"
+                        as="h3"
+                        id={`character-${character.id}-name`}
+                        aria-label={`Character name: ${character.name}`}
+                    >
                         {character.name}
                     </Text>
-                    <HStack role="group" aria-label={`Status and species: ${character.status} ${character.species}`}>
+                    <div role="group" aria-label={`Status and species: ${character.status} ${character.species}`}>
                         <Box
                             width="10px"
                             height="10px"
                             borderRadius="50%"
                             bg={getStatusColor(character.status)}
                             aria-hidden="true"
+                            as="span"
                         />
-                        <Text fontSize="sm" color="gray.600">
+                        <Text fontSize="sm" color="gray.600" as="span">
                             {character.status} - {character.species}
                         </Text>
-                    </HStack>
-                    <Box role="group" aria-labelledby={`location-${character.id}`}>
+                    </div>
+                    <address aria-labelledby={`location-${character.id}`}>
                         <Text fontSize="sm" color="gray.600" fontWeight="medium" id={`location-${character.id}`}>
                             Last known location:
                         </Text>
                         <Text fontSize="sm" aria-describedby={`location-${character.id}`}>
                             {character.location.name}
                         </Text>
-                    </Box>
-                    <Box role="group" aria-labelledby={`episode-${character.id}`}>
+                    </address>
+                    <section aria-labelledby={`episode-${character.id}`}>
                         <Text fontSize="sm" color="gray.600" fontWeight="medium" id={`episode-${character.id}`}>
                             First seen in:
                         </Text>
                         <Text fontSize="sm" aria-describedby={`episode-${character.id}`}>
                             {character.episode[0]?.name || 'Unknown'}
                         </Text>
-                    </Box>
+                    </section>
                 </VStack>
             </Card.Body>
         </Card.Root>
