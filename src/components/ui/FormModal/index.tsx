@@ -68,7 +68,19 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
     return (
         <>
             {/* Custom trigger - use children  */}
-            <div onClick={onOpen} style={{ cursor: 'pointer' }}>
+            <div
+                onClick={onOpen}
+                style={{ cursor: 'pointer' }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onOpen();
+                    }
+                }}
+                aria-label="Open user profile form"
+            >
                 {children}
             </div>
 
@@ -76,50 +88,132 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
             <Dialog.Root open={open} onOpenChange={({ open }) => !open && onClose()} placement="center">
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
-                    <Dialog.Content p={6}>
+                    <Dialog.Content
+                        p={6}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="form-modal-title"
+                        aria-describedby="form-modal-description"
+                    >
                         <Dialog.Header pb={6}>
-                            <Dialog.Title fontSize="xl" fontWeight="bold">
+                            <Dialog.Title fontSize="xl" fontWeight="bold" id="form-modal-title">
                                 {isViewMode ? 'User Profile' : 'Get Started'}
                             </Dialog.Title>
                         </Dialog.Header>
 
                         <Dialog.CloseTrigger asChild>
-                            <Button size="sm" variant="ghost" position="absolute" top={4} right={4} onClick={onClose}>
-                                <LuX />
+                            <Button
+                                size="sm"
+                                variant="ghost"
+                                position="absolute"
+                                top={4}
+                                right={4}
+                                onClick={onClose}
+                                aria-label="Close form modal"
+                                _focus={{
+                                    outline: '2px solid',
+                                    outlineColor: 'blue.500',
+                                    outlineOffset: '2px',
+                                }}
+                            >
+                                <LuX aria-hidden="true" />
                             </Button>
                         </Dialog.CloseTrigger>
 
                         <Dialog.Body pb={6}>
-                            <VStack gap={4} align="stretch">
+                            <div id="form-modal-description" className="sr-only">
+                                {isViewMode
+                                    ? 'Update your profile information including username and job title'
+                                    : 'Create your profile by entering your username and job title'}
+                            </div>
+                            <VStack
+                                gap={4}
+                                align="stretch"
+                                as="form"
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    handleSubmit();
+                                }}
+                            >
                                 <Field.Root>
-                                    <Field.Label>Username</Field.Label>
+                                    <Field.Label htmlFor="username-input">Username</Field.Label>
                                     <Input
+                                        id="username-input"
                                         value={localUsername}
                                         onChange={(e) => setLocalUsername(e.target.value)}
                                         placeholder="Enter your username"
                                         textIndent={2}
+                                        required
+                                        aria-describedby="username-hint"
+                                        _focus={{
+                                            outline: '2px solid',
+                                            outlineColor: 'blue.500',
+                                            outlineOffset: '2px',
+                                        }}
                                     />
+                                    <div id="username-hint" className="sr-only">
+                                        Username is required and should be unique to identify your profile
+                                    </div>
+                                    {!localUsername.trim() && <Field.ErrorText>Username is required</Field.ErrorText>}
                                 </Field.Root>
 
                                 <Field.Root>
-                                    <Field.Label>Job Title</Field.Label>
+                                    <Field.Label htmlFor="job-title-input">Job Title</Field.Label>
                                     <Input
+                                        id="job-title-input"
                                         value={localJobTitle}
                                         onChange={(e) => setLocalJobTitle(e.target.value)}
                                         placeholder="Enter your job title"
                                         textIndent={2}
+                                        required
+                                        aria-describedby="job-title-hint"
+                                        _focus={{
+                                            outline: '2px solid',
+                                            outlineColor: 'blue.500',
+                                            outlineOffset: '2px',
+                                        }}
                                     />
+                                    <div id="job-title-hint" className="sr-only">
+                                        Job title describes your current professional role
+                                    </div>
+                                    {!localJobTitle.trim() && <Field.ErrorText>Job title is required</Field.ErrorText>}
                                 </Field.Root>
                             </VStack>
                         </Dialog.Body>
 
                         <Dialog.Footer>
                             {isViewMode && (
-                                <Button colorPalette="red" size="md" py={2} px={3} onClick={handleClearData}>
+                                <Button
+                                    colorPalette="red"
+                                    size="md"
+                                    py={2}
+                                    px={3}
+                                    onClick={handleClearData}
+                                    aria-label="Clear all profile data permanently"
+                                    _focus={{
+                                        outline: '2px solid',
+                                        outlineColor: 'red.500',
+                                        outlineOffset: '2px',
+                                    }}
+                                >
                                     Clear Data
                                 </Button>
                             )}
-                            <Button variant="ghost" size="md" py={2} px={3} onClick={handleCancel}>
+                            <Button
+                                variant="ghost"
+                                size="md"
+                                py={2}
+                                px={3}
+                                onClick={handleCancel}
+                                aria-label={
+                                    isViewMode ? 'Close profile form without saving changes' : 'Cancel profile creation'
+                                }
+                                _focus={{
+                                    outline: '2px solid',
+                                    outlineColor: 'blue.500',
+                                    outlineOffset: '2px',
+                                }}
+                            >
                                 {isViewMode ? 'Close' : 'Cancel'}
                             </Button>
                             <Button
@@ -130,6 +224,16 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
                                 mr={2}
                                 onClick={handleSubmit}
                                 disabled={!isValid}
+                                aria-label={isViewMode ? 'Update profile information' : 'Save new profile'}
+                                _focus={{
+                                    outline: '2px solid',
+                                    outlineColor: 'teal.500',
+                                    outlineOffset: '2px',
+                                }}
+                                _disabled={{
+                                    opacity: 0.5,
+                                    cursor: 'not-allowed',
+                                }}
                             >
                                 {isViewMode ? 'Update' : 'Save'}
                             </Button>

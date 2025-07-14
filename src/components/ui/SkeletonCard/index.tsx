@@ -9,13 +9,19 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({ count = 1 }) => {
     return (
         <>
             {Array.from({ length: count }).map((_, index) => (
-                <Card.Root key={index} size="sm">
+                <Card.Root
+                    key={index}
+                    size="sm"
+                    role="status"
+                    aria-label={`Loading character card ${index + 1} of ${count}`}
+                    aria-live="polite"
+                >
                     <Card.Body>
-                        <Skeleton height="300px" borderRadius="md" mb="4" />
-                        <Skeleton height="20px" width="70%" mb="2" />
-                        <Skeleton height="16px" width="50%" mb="2" />
-                        <Skeleton height="16px" width="60%" mb="2" />
-                        <Skeleton height="16px" width="55%" />
+                        <Skeleton height="300px" borderRadius="md" mb="4" aria-label="Loading character image" />
+                        <Skeleton height="20px" width="70%" mb="2" aria-label="Loading character name" />
+                        <Skeleton height="16px" width="50%" mb="2" aria-label="Loading character status" />
+                        <Skeleton height="16px" width="60%" mb="2" aria-label="Loading character species" />
+                        <Skeleton height="16px" width="55%" aria-label="Loading character location" />
                     </Card.Body>
                 </Card.Root>
             ))}

@@ -130,7 +130,7 @@ describe('Information Page', () => {
             </TestWrapper>
         );
 
-        expect(screen.getByText('Information Page')).toBeInTheDocument();
+        expect(screen.getByText('Character Information')).toBeInTheDocument();
     });
 
     test('redirects to home with modal when no data exists', () => {
@@ -144,7 +144,7 @@ describe('Information Page', () => {
         expect(mockPush).toHaveBeenCalledWith('/?openModal=true');
 
         // Should not render the information page content when there's no data
-        expect(screen.queryByText('Information Page')).not.toBeInTheDocument();
+        expect(screen.queryByText('Character Information')).not.toBeInTheDocument();
         expect(screen.queryByText('User Profile')).not.toBeInTheDocument();
     });
 

@@ -71,7 +71,7 @@ describe('CharacterCard', () => {
 
     it('renders character image with correct props', () => {
         customRender(<CharacterCard character={mockCharacter} />);
-        const image = screen.getByAltText('Rick Sanchez');
+        const image = screen.getByAltText(/portrait of rick sanchez/i);
         expect(image).toBeInTheDocument();
         expect(image).toHaveAttribute('src', mockCharacter.image);
     });

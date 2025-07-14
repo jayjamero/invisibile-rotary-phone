@@ -1,0 +1,28 @@
+{
+  "name": "Rick and Morty Character Explorer",
+  "short_name": "R&M Explorer",
+  "description": "Explore Rick and Morty characters with our interactive web application",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0070f3",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/leonardo-logo.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "entertainment",
+    "education"
+  ],
+  "lang": "en-US"
+}
