@@ -22,6 +22,6 @@ describe('Header', () => {
         );
         expect(screen.getByText(/Information/i)).toBeInTheDocument();
         expect(screen.getByText(/Get Started/i)).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Color Mode/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /switch to (dark|light) mode/i })).toBeInTheDocument();
     });
 });

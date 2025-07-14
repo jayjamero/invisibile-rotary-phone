@@ -41,22 +41,30 @@ export function useColorModeValue<T>(light: T, dark: T) {
 
 export function ColorModeIcon() {
     const { colorMode } = useColorMode();
-    return colorMode === 'dark' ? <LuMoon title="Dark mode" /> : <LuSun title="Light mode" />;
+    return colorMode === 'dark' ? <LuMoon aria-hidden="true" /> : <LuSun aria-hidden="true" />;
 }
 
 type ColorModeButtonProps = Omit<IconButtonProps, 'aria-label'>;
 
 export const ColorModeButton = React.forwardRef<HTMLButtonElement, ColorModeButtonProps>(
     function ColorModeButton(props, ref) {
-        const { toggleColorMode } = useColorMode();
+        const { toggleColorMode, colorMode } = useColorMode();
+        const ariaLabel = colorMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+
         return (
             <ClientOnly fallback={<Skeleton boxSize="8" />}>
                 <IconButton
                     onClick={toggleColorMode}
                     variant="ghost"
-                    aria-label="Toggle color mode"
+                    aria-label={ariaLabel}
+                    title={ariaLabel}
                     size="sm"
                     ref={ref}
+                    _focus={{
+                        outline: '2px solid',
+                        outlineColor: 'blue.500',
+                        outlineOffset: '2px',
+                    }}
                     {...props}
                     css={{
                         _icon: {

@@ -1,6 +1,6 @@
 'use client';
 
-import { VStack, Text, Box, Container, SimpleGrid } from '@chakra-ui/react';
+import { VStack, Text, Box, Container, SimpleGrid, Heading } from '@chakra-ui/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
 import { useUserForm } from '@/components/providers/FormProvider';
@@ -70,7 +70,7 @@ function InformationContent() {
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <main style={{ flex: 1 }}>
+            <main id="main-content" style={{ flex: 1 }} role="main" aria-label="Character information page">
                 <Box
                     bg={{ base: 'rgba(255, 255, 255, 0.8)', _dark: 'rgba(0, 0, 0, 0.8)' }}
                     display="flex"
@@ -80,37 +80,56 @@ function InformationContent() {
                 >
                     <Container maxW="8xl">
                         <VStack gap={8} align="center">
-                            <Text fontSize="3xl" fontWeight="bold" textAlign="center">
-                                Information Page
-                            </Text>
+                            <Heading as="h1" size="2xl" textAlign="center" id="page-title">
+                                Character Information
+                            </Heading>
 
-                            <Text fontSize="2xl" fontWeight="bold" textAlign="center" color="teal.600">
+                            <Text
+                                fontSize="2xl"
+                                fontWeight="bold"
+                                textAlign="center"
+                                color="teal.600"
+                                role="status"
+                                aria-live="polite"
+                            >
                                 Welcome, {formData.username}!
                             </Text>
 
                             {/* Rick and Morty Characters Section */}
-                            <Box width="100%" maxW="6xl">
+                            <Box width="100%" maxW="6xl" as="section" aria-labelledby="characters-heading">
                                 <VStack gap={6} align="left">
-                                    <Text fontSize="2xl" fontWeight="bold" textAlign="left">
+                                    <Heading as="h2" size="xl" textAlign="left" id="characters-heading">
                                         Rick and Morty Characters
-                                    </Text>
+                                    </Heading>
 
                                     {charactersError && (
-                                        <Text color="red.500" textAlign="center">
+                                        <Text color="red.500" textAlign="center" role="alert" aria-live="assertive">
                                             Error loading characters: {charactersError.message}
                                         </Text>
                                     )}
 
                                     {/* Show skeleton loaders when loading */}
                                     {charactersLoading && (
-                                        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6} width="100%">
+                                        <SimpleGrid
+                                            columns={{ base: 1, md: 2, lg: 3 }}
+                                            gap={6}
+                                            width="100%"
+                                            role="status"
+                                            aria-label="Loading characters"
+                                        >
                                             <SkeletonCard count={6} />
                                         </SimpleGrid>
                                     )}
 
                                     {/* Show real data when available */}
                                     {!charactersLoading && charactersData?.characters.results && (
-                                        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6} width="100%">
+                                        <SimpleGrid
+                                            columns={{ base: 1, md: 2, lg: 3 }}
+                                            gap={6}
+                                            width="100%"
+                                            role="grid"
+                                            aria-label={`Grid of ${charactersData.characters.results.length} Rick and Morty characters`}
+                                        >
                                             {charactersData.characters.results.slice(0, 6).map((character) => (
                                                 <CharacterCard
                                                     key={character.id}
@@ -132,14 +151,25 @@ function InformationContent() {
                                                     info={charactersData.characters.info}
                                                     onPageChange={handlePageChange}
                                                 />
-                                                <Text fontSize="xs" color="gray.500" textAlign="center">
+                                                <Text
+                                                    fontSize="xs"
+                                                    color="gray.500"
+                                                    textAlign="center"
+                                                    aria-label={`Current page ${currentPage} of ${charactersData.characters.info.pages} pages`}
+                                                >
                                                     Page {currentPage} of {charactersData.characters.info.pages}
                                                 </Text>
                                             </VStack>
                                         )}
 
                                     {charactersData && !charactersLoading && (
-                                        <Text fontSize="sm" color="gray.600" textAlign="center">
+                                        <Text
+                                            fontSize="sm"
+                                            color="gray.600"
+                                            textAlign="center"
+                                            role="status"
+                                            aria-live="polite"
+                                        >
                                             Showing 6 of {charactersData.characters.info.count} characters
                                         </Text>
                                     )}
