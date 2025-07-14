@@ -28,6 +28,8 @@ const Header = () => {
     return (
         <Box w="full" boxShadow="md" display="flex" justifyContent="center">
             <Container maxW="8xl" padding={{ base: '2', md: '4' }}>
+        <Box bg={{ base: 'white', _dark: 'black' }} w="full" boxShadow="md" display="flex" justifyContent="center">
+            <Container maxW="7xl" padding={{ base: '2', md: '4' }}>
                 <Flex justify="space-between" align="stretch">
                     {/* Logo */}
                     <Link href="/">
