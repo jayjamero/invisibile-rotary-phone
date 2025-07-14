@@ -1,40 +1,72 @@
-# Project Summary
+# 📘 Project Summary
 
-## Approach
+## ✅ Approach
 
-At the beginning of this project, the process I followed was:
+At the outset of the project, I followed a structured process to ensure traceability, clarity, and high-quality deliverables:
 
-1. Create an issue outlining the changes I wanted to make + testing strategy
-2. Implement the feature
-3. Create pull request, that links back to the innitial issue.
+1. **Created an issue** for each feature/task, including a testing strategy.
+2. **Implemented the feature** based on the outlined scope.
+3. **Opened a pull request (PR)** that referenced the original issue.
 
-The reason for doing this is I wanted to demonstrate, that I value having a paper trail into decisions and the work involved. I also want to define what done looks like, how the testing strategy looks and to help the reviewer have confidence in the PR.
-As the project grew in complexity, and with time constraints, I decided after the first 5 features, to change tact. In real work environment I would prefer to have things in smaller chunks.
+This workflow was chosen to:
+- Establish a clear **paper trail** of decisions and changes.
+- Define **"Definition of Done"** for each task.
+- Make **testing strategies explicit**, improving confidence in the review process.
 
-### Semver/Conventional commits
+As the project grew in complexity and time became limited, I pivoted after delivering the first 5 features. In a real-world setting, I would prefer smaller, iterative chunks of work that are easier to manage and review.
 
-Since I prefer using a rebase strategy vs merge commit, the connventional commit strategy not only helps the reviewer step through commits easier, but it also helps deal with merge conflicts much easier. (Especially with `git.rerere` enabled).
-I didn't squash any commits, so all of the my steps and thoughts are documented in the commit history.
+---
 
-## Wireframes
+### 🔁 Semantic Versioning & Conventional Commits
 
-Once I took a look at the requirements doc, I began to visually map out what was required in a form of a wireframe.
+I adopted a **rebase strategy** over merge commits, supported by **conventional commit messages**. This approach offers several benefits:
 
-The final product delivered for the Information screen difers from the wireframe slightly as its not including a search bar or pagination at the top (its on the bottom), I decided as the project grew in complexity, to just focus on the MVP realease.
+- Helps reviewers follow the commit history clearly.
+- Reduces merge conflicts (especially effective when using `git rerere`).
+- Preserves the thought process and development steps in the commit log.
 
-<img width="882" height="1071" alt="Screenshot 2025-07-15 at 5 24 17 am" src="https://github.com/user-attachments/assets/173bd58a-8be0-498d-baa0-73b59f9a2711" />
+> ✨ I intentionally did not squash commits so each step and decision is visible in the history.
 
-## Breakdown of work
+---
 
-Using the wireframes and the requirements doc, I then broke down the tasks of work into smaller pieces.
+## 🤖 Use of AI
 
-This process is fluid, I may combine 2 of the features into 1 PR, depending on if it makes sense in development.
+After completing the initial 5 features, I began leveraging AI tools to accelerate delivery without compromising quality:
 
-For example adding Jest and RTL would require something to test against, so I combined the Footer UI with it. This atleast can give the reviewer some confidence on whats required to test and that the feature is working as expected.
+- **GitHub Copilot** and **Sonnet v4** were used to:
+  - Generate unit tests.
+  - Implement logic for access control, hooks/providers and UI component development.
 
-Some things that I think about is what can be easier for the review to code review but also test. Having many files in a PR is just not a great developer experience.
+AI significantly improved productivity, especially as I often refactor while iterating on requirements.
 
-<img width="469" height="1044" alt="Screenshot 2025-07-15 at 5 24 02 am" src="https://github.com/user-attachments/assets/c4391461-8a02-4745-a388-e5923b10c36b" />
+The combination of **modular development** and **conventional commits** made it easier to apply AI effectively to repetitive or time-consuming tasks.
 
-🟢 Green boxes represent the work completed
+---
 
+## 🧩 Wireframes
+
+Upon reviewing the requirements document, I created **visual wireframes** to map out the layout and functionality.
+
+While the final version of the Information screen differs slightly from the wireframe (e.g., pagination was moved to the bottom, search bar removed), the adjustments reflect a focus on delivering a robust **MVP** under time constraints.
+
+> ![Wireframe Screenshot](https://github.com/user-attachments/assets/173bd58a-8be0-498d-baa0-73b59f9a2711)
+
+---
+
+## 🧱 Breakdown of Work
+
+Using both the wireframes and the requirements document, I decomposed the project into smaller, manageable tasks.
+
+This process remained **flexible** — in some cases, related features were grouped into a single PR when it made sense.  
+For example:
+
+- **Jest & RTL setup** was bundled with a basic **Footer UI component** to immediately test against something tangible.
+
+My goal throughout was to:
+- Improve **developer experience** for reviewers.
+- Avoid overwhelming PRs with too many unrelated files.
+- Ensure each PR is meaningful and testable.
+
+> ![Task Breakdown Screenshot](https://github.com/user-attachments/assets/c4391461-8a02-4745-a388-e5923b10c36b)
+
+🟢 **Green boxes** represent completed tasks.
