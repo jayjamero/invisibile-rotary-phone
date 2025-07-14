@@ -19,7 +19,7 @@ export default function robots(): MetadataRoute.Robots {
                 disallow: ['/api/', '/private/'],
             },
         ],
-        sitemap: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://leonardo-challenge-mero.vercel.app'}/sitemap.xml`,
-        host: process.env.NEXT_PUBLIC_BASE_URL || 'https://leonardo-challenge-mero.vercel.app',
+        sitemap: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://invisibile-rotary-phone.vercel.app'}/sitemap.xml`,
+        host: process.env.NEXT_PUBLIC_BASE_URL || 'https://invisibile-rotary-phone.vercel.app',
     };
 }
