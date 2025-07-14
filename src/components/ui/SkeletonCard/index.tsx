@@ -13,6 +13,7 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({ count = 1 }) => {
                     key={index}
                     size="sm"
                     role="status"
+                    w={['100%', '300px']}
                     aria-label={`Loading character card ${index + 1} of ${count}`}
                     aria-live="polite"
                 >

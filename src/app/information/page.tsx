@@ -111,7 +111,7 @@ function InformationContent() {
                                             aria-live="polite"
                                             aria-label="Loading characters"
                                         >
-                                            {Array.from({ length: 20 }).map((_, index) => (
+                                            {Array.from({ length: 9 }).map((_, index) => (
                                                 <SkeletonCard key={index} />
                                             ))}
                                         </Flex>
@@ -129,7 +129,7 @@ function InformationContent() {
                                         <>
                                             <main role="main" aria-label="Characters list">
                                                 <Flex wrap="wrap" gap="6" justify="center">
-                                                    {charactersData.characters.results.map((character) => (
+                                                    {charactersData.characters.results.slice(0, 9).map((character) => (
                                                         <CharacterCard
                                                             key={character.id}
                                                             character={character}
