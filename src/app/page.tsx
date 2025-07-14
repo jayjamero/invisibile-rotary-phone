@@ -2,7 +2,7 @@
 
 import { Button, HStack } from '@chakra-ui/react';
 
-import { ColorModeButton } from '@/components/ui/color-mode';
+import { ColorModeButton } from '@/components/ui/ColorMode';
 import Header from '@/layout/Header';
 import Footer from '@/layout/Footer';
 import styles from './page.module.css';
