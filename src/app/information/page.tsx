@@ -28,8 +28,10 @@ function InformationContent() {
     const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    // Fetch Rick and Morty characters data
-    const { data: charactersData, loading: charactersLoading, error: charactersError } = useCharacters(currentPage);
+    // Fetch Rick and Morty characters data (but skip query if no user data)
+    const { data: charactersData, loading: charactersLoading, error: charactersError } = useCharacters(
+        hasUserData && isHydrated ? currentPage : undefined
+    );
 
     // Sync state with URL changes
     useEffect(() => {

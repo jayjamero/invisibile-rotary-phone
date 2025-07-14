@@ -17,6 +17,7 @@ export const useCharacters = (page?: number, filter?: FilterCharacter) => {
     return useQuery<CharactersResponse>(GET_CHARACTERS, {
         variables: { page, filter },
         errorPolicy: 'all',
+        skip: page === undefined, // Skip query when page is undefined
     });
 };
 
