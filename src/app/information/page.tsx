@@ -11,6 +11,8 @@ import Footer from '@/layout/Footer';
 import CharacterCard from '@/components/ui/CharacterCard';
 import SkeletonCard from '@/components/ui/SkeletonCard';
 import PaginationControls from '@/components/ui/PaginationControls';
+import CharacterDetailModal from '@/components/ui/CharacterDetailModal';
+import { Character } from '@/lib/graphql/types';
 
 function InformationContent() {
     const { formData, isHydrated } = useUserForm();
@@ -21,6 +23,10 @@ function InformationContent() {
     // Get initial page from URL or default to 1
     const pageFromUrl = parsePageFromUrl(searchParams.get('page'));
     const [currentPage, setCurrentPage] = useState(pageFromUrl);
+
+    // Character dialog state
+    const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     // Fetch Rick and Morty characters data
     const { data: charactersData, loading: charactersLoading, error: charactersError } = useCharacters(currentPage);
@@ -49,6 +55,16 @@ function InformationContent() {
         setCurrentPage(page);
         const newUrl = generatePageUrl(page);
         router.push(newUrl);
+    };
+
+    const handleCharacterClick = (character: Character) => {
+        setSelectedCharacter(character);
+        setIsDialogOpen(true);
+    };
+
+    const handleDialogClose = () => {
+        setIsDialogOpen(false);
+        setSelectedCharacter(null);
     };
 
     return (
@@ -96,7 +112,11 @@ function InformationContent() {
                                     {!charactersLoading && charactersData?.characters.results && (
                                         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6} width="100%">
                                             {charactersData.characters.results.slice(0, 6).map((character) => (
-                                                <CharacterCard key={character.id} character={character} />
+                                                <CharacterCard
+                                                    key={character.id}
+                                                    character={character}
+                                                    onClick={() => handleCharacterClick(character)}
+                                                />
                                             ))}
                                         </SimpleGrid>
                                     )}
@@ -130,6 +150,9 @@ function InformationContent() {
                 </Box>
             </main>
             <Footer />
+
+            {/* Character Detail Dialog */}
+            <CharacterDetailModal character={selectedCharacter} isOpen={isDialogOpen} onClose={handleDialogClose} />
         </div>
     );
 }
