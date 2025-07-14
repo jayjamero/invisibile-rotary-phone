@@ -16,6 +16,16 @@ As the project grew in complexity, and with time constraints, I decided after th
 Since I prefer using a rebase strategy vs merge commit, the connventional commit strategy not only helps the reviewer step through commits easier, but it also helps deal with merge conflicts much easier. (Especially with `git.rerere` enabled).
 I didn't squash any commits, so all of the my steps and thoughts are documented in the commit history.
 
+## Use of AI
+
+After the first 5 features/issues, I realised I needed to speed up the process in order to complete the project.
+
+I used CoPilot + Sonnete v4 to help me create unit tests as well as functionality of access restriction and card display.
+
+It helped alot as I tend to refactor as I move forward with requirements.
+
+The conventional commits and building the project piece meal definetly when needing to use AI to complete some tedius tasks.
+
 ## Wireframes
 
 Once I took a look at the requirements doc, I began to visually map out what was required in a form of a wireframe.
