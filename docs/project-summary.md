@@ -35,7 +35,7 @@ After completing the initial 5 features, I began leveraging AI tools to accelera
 
 - **GitHub Copilot** and **Sonnet v4** were used to:
   - Generate unit tests.
-  - Implement logic for access control and conditional UI rendering.
+  - Implement logic for access control, hooks/providers and UI component development.
 
 AI significantly improved productivity, especially as I often refactor while iterating on requirements.
 
