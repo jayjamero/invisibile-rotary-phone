@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Box, VStack, Text, Card, Image } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, VStack, Text, Card, Image, Spinner } from '@chakra-ui/react';
 import { Character } from '@/lib/graphql/types';
 
 interface CharacterCardProps {
@@ -10,6 +10,8 @@ interface CharacterCardProps {
 }
 
 const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => {
+    const [imageLoaded, setImageLoaded] = useState(false);
+
     const getStatusColor = (status: Character['status']) => {
         switch (status) {
             case 'Alive':
@@ -34,6 +36,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => 
             tabIndex={onClick ? 0 : undefined}
             aria-label={onClick ? `View details for ${cardTitle}` : cardTitle}
             aria-describedby={`character-${character.id}-description`}
+            maxW={300}
             onKeyDown={
                 onClick
                     ? (e) => {
@@ -52,14 +55,39 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => 
             as="article"
             aria-labelledby={`character-${character.id}-name`}
         >
-            <figure>
+            <figure style={{ position: 'relative' }}>
+                {!imageLoaded && (
+                    <Box
+                        position="absolute"
+                        top="0"
+                        left="0"
+                        width="300px"
+                        height="300px"
+                        bg="gray.800"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        borderRadius="inherit"
+                        zIndex="1"
+                    >
+                        <Text color="gray.100" fontSize="sm">
+                            <Spinner />
+                        </Text>
+                    </Box>
+                )}
                 <Image
                     src={character.image}
                     alt={`Portrait of ${character.name}, a ${character.status.toLowerCase()} ${character.species.toLowerCase()}`}
-                    width="100%"
+                    width="300px"
                     height="300px"
                     objectFit="cover"
                     loading="lazy"
+                    onLoad={() => setImageLoaded(true)}
+                    onError={() => setImageLoaded(true)}
+                    style={{
+                        opacity: imageLoaded ? 1 : 0,
+                        transition: 'opacity 0.3s ease-in-out',
+                    }}
                 />
             </figure>
             <Card.Body p={4}>
