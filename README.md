@@ -4,6 +4,10 @@ A modern React application built with Next.js that displays Rick and Morty chara
 
 This was a fun project, but did take me abit of time to get used to NextJS as well as the UI library, [see my Project Summary here](https://github.com/jayjamero/invisibile-rotary-phone/blob/main/docs/project-summary.md).
 
+## 🎩 The Project
+
+➡️ URL: [https://invisibile-rotary-phone.vercel.app](https://invisibile-rotary-phone.vercel.app) ⬅️
+
 <img width="1355" height="1248" alt="Screenshot 2025-07-15 at 6 00 42 am" src="https://github.com/user-attachments/assets/fbe98cea-e361-4284-8bae-e7b2c918690b" />
 <img width="1280" height="844" alt="Screenshot 2025-07-15 at 6 01 05 am" src="https://github.com/user-attachments/assets/b59e1f95-8575-4e5d-ae18-6a9b5d1315fd" />
 
