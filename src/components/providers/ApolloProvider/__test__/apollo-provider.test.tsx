@@ -37,17 +37,13 @@ const TEST_QUERY = gql`
 
 // Test component that uses Apollo hooks
 const TestComponent: React.FC = () => {
-  try {
-    const { loading, error, data } = useQuery(TEST_QUERY, {
-      errorPolicy: 'all'
-    });
+  const { loading, error } = useQuery(TEST_QUERY, {
+    errorPolicy: 'all'
+  });
 
-    if (loading) return <div data-testid="loading">Loading...</div>;
-    if (error) return <div data-testid="error">Error: {error.message}</div>;
-    return <div data-testid="data">Data loaded</div>;
-  } catch (err) {
-    return <div data-testid="hook-error">Hook failed: {(err as Error).message}</div>;
-  }
+  if (loading) return <div data-testid="loading">Loading...</div>;
+  if (error) return <div data-testid="error">Error: {error.message}</div>;
+  return <div data-testid="data">Data loaded</div>;
 };
 
 describe('ApolloProvider', () => {

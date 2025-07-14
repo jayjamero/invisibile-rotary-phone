@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Container, Flex, Text, Link, Image, Button, Stack } from '@chakra-ui/react';
+import { Box, Container, Flex, Text, Link, Image, Button } from '@chakra-ui/react';
 import { ColorModeButton } from '../../components/ui/ColorMode';
 import { UserFormTrigger } from '../../components/ui/FormModal';
 import { useUserForm } from '../../components/providers/FormProvider';

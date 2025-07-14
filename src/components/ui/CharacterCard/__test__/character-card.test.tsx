@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { render as customRender } from '@/test-utils/render';
 import CharacterCard from '../index';
 import { Character } from '@/lib/graphql/types';

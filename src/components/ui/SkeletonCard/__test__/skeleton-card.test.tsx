@@ -1,5 +1,4 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
 import { render as customRender } from '@/test-utils/render';
 import SkeletonCard from '../index';
 
