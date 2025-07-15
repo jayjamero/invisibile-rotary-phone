@@ -1,24 +1,29 @@
 'use client';
 
-import { Dialog, Button, Field, Input, VStack, useDisclosure } from '@chakra-ui/react';
-import { LuX } from 'react-icons/lu';
+import { Dialog, Button, Field, Input, VStack, useDisclosure, Alert } from '@chakra-ui/react';
+import { LuX, LuInfo } from 'react-icons/lu';
 import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useUserForm } from '../../providers/FormProvider';
 
 // Separate trigger component that can be used anywhere
 export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     const { open, onOpen, onClose } = useDisclosure();
     const { formData, resetForm, saveToStorage, clearStorage } = useUserForm();
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     // Local state for form inputs
     const [localUsername, setLocalUsername] = useState('');
     const [localJobTitle, setLocalJobTitle] = useState('');
+    const [showValidationAlert, setShowValidationAlert] = useState(true);
 
     // Load form data into local state when modal opens
     useEffect(() => {
         if (open) {
             setLocalUsername(formData.username);
             setLocalJobTitle(formData.jobTitle);
+            setShowValidationAlert(true); // Reset alert when modal opens
         }
     }, [open, formData.username, formData.jobTitle]);
 
@@ -37,6 +42,18 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
     // Local validation
     const isValid = localUsername.trim() !== '' && localJobTitle.trim() !== '';
 
+    // Helper function to remove openModal from URL
+    const removeOpenModalFromURL = () => {
+        const currentParams = new URLSearchParams(searchParams.toString());
+        if (currentParams.has('openModal')) {
+            currentParams.delete('openModal');
+            const newUrl = currentParams.toString()
+                ? `${window.location.pathname}?${currentParams.toString()}`
+                : window.location.pathname;
+            router.replace(newUrl);
+        }
+    };
+
     const handleSubmit = () => {
         if (isValid) {
             // Save the local data directly to storage and update global state
@@ -44,10 +61,12 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
             saveToStorage(dataToSave);
 
             console.log('Form submitted:', dataToSave);
+            setShowValidationAlert(false); // Hide any validation alert
+            removeOpenModalFromURL(); // Remove openModal from URL
             onClose();
         } else {
             console.error('Form is invalid');
-            alert('Please fill out all fields correctly.');
+            setShowValidationAlert(true);
         }
     };
 
@@ -61,6 +80,8 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
         // Reset local state to match global state
         setLocalUsername(formData.username);
         setLocalJobTitle(formData.jobTitle);
+        setShowValidationAlert(false); // Hide alert when canceling
+        removeOpenModalFromURL(); // Remove openModal from URL
         onClose();
         resetForm();
     };
@@ -85,7 +106,7 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
             </div>
 
             {/* Modal Dialog */}
-            <Dialog.Root open={open} onOpenChange={({ open }) => !open && onClose()} placement="center">
+            <Dialog.Root open={open} onOpenChange={({ open }) => !open && handleCancel()} placement="center">
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
                     <Dialog.Content
@@ -108,7 +129,7 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
                                 position="absolute"
                                 top={4}
                                 right={4}
-                                onClick={onClose}
+                                onClick={handleCancel}
                                 aria-label="Close form modal"
                                 _focus={{
                                     outline: '2px solid',
@@ -140,7 +161,10 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
                                     <Input
                                         id="username-input"
                                         value={localUsername}
-                                        onChange={(e) => setLocalUsername(e.target.value)}
+                                        onChange={(e) => {
+                                            setLocalUsername(e.target.value);
+                                            if (showValidationAlert) setShowValidationAlert(false);
+                                        }}
                                         placeholder="Enter your username"
                                         textIndent={2}
                                         required
@@ -162,7 +186,10 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
                                     <Input
                                         id="job-title-input"
                                         value={localJobTitle}
-                                        onChange={(e) => setLocalJobTitle(e.target.value)}
+                                        onChange={(e) => {
+                                            setLocalJobTitle(e.target.value);
+                                            if (showValidationAlert) setShowValidationAlert(false);
+                                        }}
                                         placeholder="Enter your job title"
                                         textIndent={2}
                                         required
@@ -179,6 +206,21 @@ export const UserFormTrigger: React.FC<{ children?: React.ReactNode }> = ({ chil
                                     {!localJobTitle.trim() && <Field.ErrorText>Job title is required</Field.ErrorText>}
                                 </Field.Root>
                             </VStack>
+
+                            {/* Validation Alert */}
+                            {showValidationAlert && (
+                                <Alert.Root status="error" mt={4} p={4}>
+                                    <Alert.Indicator>
+                                        <LuInfo />
+                                    </Alert.Indicator>
+                                    <Alert.Content>
+                                        <Alert.Title>Validation Error</Alert.Title>
+                                        <Alert.Description>
+                                            Please fill out all fields correctly before submitting.
+                                        </Alert.Description>
+                                    </Alert.Content>
+                                </Alert.Root>
+                            )}
                         </Dialog.Body>
 
                         <Dialog.Footer>

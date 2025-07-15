@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { gql } from '@apollo/client';
 import { useSecureQuery, useSecureLazyQuery, useSecureMutation, useGraphQLAuditLogger } from '../secure-apollo-hooks';
@@ -111,7 +111,9 @@ describe('secure-apollo-hooks (simplified)', () => {
             const [execute] = result.current;
 
             // Call the execute function - this should trigger validation
-            execute({ variables: { id: '1' } });
+            act(() => {
+                execute({ variables: { id: '1' } });
+            });
 
             expect(mockIsQuerySafe).toHaveBeenCalledWith(TEST_QUERY, false);
         });
@@ -136,7 +138,9 @@ describe('secure-apollo-hooks (simplified)', () => {
             const [execute] = result.current;
 
             // Call the execute function - this should trigger validation
-            execute({ variables: { input: { name: 'Test' } } });
+            act(() => {
+                execute({ variables: { input: { name: 'Test' } } });
+            });
 
             expect(mockIsQuerySafe).toHaveBeenCalledWith(TEST_MUTATION, false);
         });
