@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { renderHook, act } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { gql } from '@apollo/client';
 import { useSecureQuery, useSecureLazyQuery, useSecureMutation, useGraphQLAuditLogger } from '../secure-apollo-hooks';
 
@@ -19,19 +19,15 @@ jest.mock('../secure-query-utils', () => ({
 
 // Import mocked functions
 import {
-    maskGraphQLResponse,
     logSecureGraphQLOperation,
     isQuerySafe,
-    handleGraphQLError,
     createAuditSafeData,
 } from '../secure-query-utils';
 
-const mockMaskGraphQLResponse = maskGraphQLResponse as jest.MockedFunction<typeof maskGraphQLResponse>;
 const mockLogSecureGraphQLOperation = logSecureGraphQLOperation as jest.MockedFunction<
     typeof logSecureGraphQLOperation
 >;
 const mockIsQuerySafe = isQuerySafe as jest.MockedFunction<typeof isQuerySafe>;
-const mockHandleGraphQLError = handleGraphQLError as jest.MockedFunction<typeof handleGraphQLError>;
 const mockCreateAuditSafeData = createAuditSafeData as jest.MockedFunction<typeof createAuditSafeData>;
 
 // Test queries and mutations
@@ -54,12 +50,14 @@ const TEST_MUTATION = gql`
 `;
 
 // Mock setup function
-const createMockProvider = (mocks: any[] = []) => {
-    return ({ children }: { children: React.ReactNode }) => (
+const createMockProvider = (mocks: MockedResponse[] = []) => {
+    const MockProvider = ({ children }: { children: React.ReactNode }) => (
         <MockedProvider mocks={mocks} addTypename={false}>
             {children}
         </MockedProvider>
     );
+    MockProvider.displayName = 'MockProvider';
+    return MockProvider;
 };
 
 describe('secure-apollo-hooks (simplified)', () => {

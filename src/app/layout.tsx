@@ -20,6 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
     title: {
         default: 'Rick and Morty Character Explorer | Leonardo AI Challenge',
         template: '%s | Rick and Morty Explorer',
