@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Provider as ThemeProvider } from '@/components/providers/ThemeProvider';
 import { UserFormProvider } from '@/components/providers/FormProvider';
 import ApolloProvider from '@/components/providers/ApolloProvider/index';
+import SecureErrorBoundary from '@/components/security/SecureErrorBoundary';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import '@/styles/accessibility.css';
@@ -85,11 +86,13 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 <link rel="manifest" href="/manifest.json" />
             </head>
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                <ApolloProvider>
-                    <ThemeProvider>
-                        <UserFormProvider>{children}</UserFormProvider>
-                    </ThemeProvider>
-                </ApolloProvider>
+                <SecureErrorBoundary>
+                    <ApolloProvider>
+                        <ThemeProvider>
+                            <UserFormProvider>{children}</UserFormProvider>
+                        </ThemeProvider>
+                    </ApolloProvider>
+                </SecureErrorBoundary>
             </body>
         </html>
     );
