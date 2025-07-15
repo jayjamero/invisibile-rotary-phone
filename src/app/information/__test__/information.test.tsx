@@ -5,6 +5,13 @@ import Information from '../page';
 import { UserFormProvider } from '@/components/providers/FormProvider';
 import { GET_CHARACTERS } from '@/lib/graphql/queries';
 
+// Mock environment variables for testing
+process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT = 'https://rickandmortyapi.com/graphql';
+process.env.NEXT_PUBLIC_MAX_QUERY_DEPTH = '10';
+process.env.NEXT_PUBLIC_MAX_QUERY_COMPLEXITY = '1000';
+process.env.NEXT_PUBLIC_REQUEST_TIMEOUT = '10000';
+process.env.NEXT_PUBLIC_RATE_LIMIT = '60';
+
 // Mock Next.js navigation
 const mockPush = jest.fn();
 const mockReplace = jest.fn();

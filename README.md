@@ -1,6 +1,6 @@
 # Rick and Morty Challenge
 
-A modern React application built with Next.js that displays Rick and Morty characters using the Rick and Morty API. Features a responsive design, accessibility-first approach, and comprehensive testing suite.
+A modern React application built with Next.js that displays Rick and Morty characters using the Rick and Morty API. Features comprehensive GraphQL security, data masking, responsive design, accessibility-first approach, and extensive testing suite.
 
 This was a fun project, but did take me abit of time to get used to NextJS as well as the UI library, [see my Project Summary here](https://github.com/jayjamero/invisibile-rotary-phone/blob/main/docs/project-summary.md).
 
@@ -22,13 +22,17 @@ This was a fun project, but did take me abit of time to get used to NextJS as we
 - **Accessibility**: WCAG 2.1 AA compliant with semantic HTML and ARIA support
 - **SEO Optimised**: Meta tags, semantic markup, and PWA support
 - **Type Safety**: Full TypeScript implementation
+- **🔒 GraphQL Security**: Comprehensive data masking and query validation
+- **📊 Audit Logging**: Production-ready security audit logging
+- **🛡️ Error Sanitization**: Secure error handling for GraphQL operations
 
 ## 🛠 Tech Stack
 
 - **Framework**: Next.js 15.3.5 (App Router)
 - **React**: 19.0.0
 - **UI Library**: Chakra UI v3.22.0
-- **GraphQL**: Apollo Client 3.13.8
+- **GraphQL**: Apollo Client 3.13.8 with secure hooks
+- **Security**: Custom data masking and audit logging system
 - **Styling**: Emotion React
 - **Theme**: next-themes for dark mode
 - **Testing**: Jest + React Testing Library
