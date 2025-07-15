@@ -3,6 +3,23 @@ import { render } from '../../../../test-utils/render';
 import { UserFormTrigger } from '../index';
 import { UserFormProvider } from '../../../providers/FormProvider';
 
+// Mock Next.js navigation
+const mockPush = jest.fn();
+const mockReplace = jest.fn();
+const mockSearchParams = new URLSearchParams();
+
+jest.mock('next/navigation', () => ({
+    useRouter: () => ({
+        push: mockPush,
+        replace: mockReplace,
+        back: jest.fn(),
+        forward: jest.fn(),
+        refresh: jest.fn(),
+        prefetch: jest.fn(),
+    }),
+    useSearchParams: () => mockSearchParams,
+}));
+
 // Wrapper component with form provider
 const TestWrapper = ({ children }: { children: React.ReactNode }) => <UserFormProvider>{children}</UserFormProvider>;
 
@@ -10,6 +27,10 @@ describe('FormModal', () => {
     beforeEach(() => {
         // Clear localStorage before each test to ensure consistent state
         localStorage.clear();
+        // Clear mock functions
+        mockPush.mockClear();
+        mockReplace.mockClear();
+        mockSearchParams.delete('openModal');
     });
 
     it('renders trigger button and opens modal', async () => {
@@ -35,16 +56,17 @@ describe('FormModal', () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
-                    <button>Get Started</button>
+                    <button>Open Modal</button>
                 </UserFormTrigger>
             </TestWrapper>
         );
 
-        fireEvent.click(screen.getByText('Get Started'));
+        const triggerButton = screen.getByText('Open Modal');
+        fireEvent.click(triggerButton);
 
         await waitFor(() => {
-            expect(screen.getByPlaceholderText('Enter your username')).toBeInTheDocument();
-            expect(screen.getByPlaceholderText('Enter your job title')).toBeInTheDocument();
+            expect(screen.getByLabelText('Username')).toBeInTheDocument();
+            expect(screen.getByLabelText('Job Title')).toBeInTheDocument();
         });
     });
 
@@ -52,16 +74,17 @@ describe('FormModal', () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
-                    <button>Get Started</button>
+                    <button>Open Modal</button>
                 </UserFormTrigger>
             </TestWrapper>
         );
 
-        fireEvent.click(screen.getByText('Get Started'));
+        const triggerButton = screen.getByText('Open Modal');
+        fireEvent.click(triggerButton);
 
         await waitFor(() => {
-            const submitButton = screen.getByText('Save');
-            expect(submitButton).toBeDisabled();
+            const saveButton = screen.getByText('Save');
+            expect(saveButton).toBeDisabled();
         });
     });
 
@@ -69,28 +92,27 @@ describe('FormModal', () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
-                    <button>Get Started</button>
+                    <button>Open Modal</button>
                 </UserFormTrigger>
             </TestWrapper>
         );
 
-        fireEvent.click(screen.getByText('Get Started'));
+        const triggerButton = screen.getByText('Open Modal');
+        fireEvent.click(triggerButton);
 
-        // Wait for modal to open first
         await waitFor(() => {
-            expect(screen.getByText('Get Started')).toBeInTheDocument();
+            expect(screen.getByLabelText('Username')).toBeInTheDocument();
         });
 
-        // Now find and fill the form fields
-        const usernameInput = screen.getByPlaceholderText('Enter your username');
-        const jobTitleInput = screen.getByPlaceholderText('Enter your job title');
+        const usernameInput = screen.getByLabelText('Username');
+        const jobTitleInput = screen.getByLabelText('Job Title');
 
-        fireEvent.change(usernameInput, { target: { value: 'johndoe' } });
-        fireEvent.change(jobTitleInput, { target: { value: 'Developer' } });
+        fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+        fireEvent.change(jobTitleInput, { target: { value: 'developer' } });
 
         await waitFor(() => {
-            const submitButton = screen.getByText('Save');
-            expect(submitButton).not.toBeDisabled();
+            const saveButton = screen.getByText('Save');
+            expect(saveButton).not.toBeDisabled();
         });
     });
 
@@ -98,24 +120,22 @@ describe('FormModal', () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
-                    <button>Get Started</button>
+                    <button>Open Modal</button>
                 </UserFormTrigger>
             </TestWrapper>
         );
 
-        fireEvent.click(screen.getByText('Get Started'));
+        const triggerButton = screen.getByText('Open Modal');
+        fireEvent.click(triggerButton);
 
         await waitFor(() => {
-            expect(screen.getByText('Get Started') || screen.getByText('User Profile')).toBeInTheDocument();
+            expect(screen.getByText('Get Started')).toBeInTheDocument();
         });
 
-        // Click either Cancel or Close button depending on mode
-        const cancelButton = screen.queryByText('Cancel') || screen.queryByText('Close');
-        expect(cancelButton).toBeInTheDocument();
-        fireEvent.click(cancelButton!);
+        const cancelButton = screen.getByText('Cancel');
+        fireEvent.click(cancelButton);
 
         await waitFor(() => {
-            // Modal title should not be in document when closed
             const modalTitles = screen.queryAllByText('Get Started');
             const profileTitles = screen.queryAllByText('User Profile');
             // Only the trigger button should remain
@@ -127,11 +147,76 @@ describe('FormModal', () => {
         render(
             <TestWrapper>
                 <UserFormTrigger>
-                    <button>Custom Trigger</button>
+                    <div>Custom Content</div>
                 </UserFormTrigger>
             </TestWrapper>
         );
 
-        expect(screen.getByText('Custom Trigger')).toBeInTheDocument();
+        expect(screen.getByText('Custom Content')).toBeInTheDocument();
+    });
+
+    it('removes openModal query parameter when modal is closed', async () => {
+        // Set up URL with openModal parameter
+        mockSearchParams.set('openModal', 'true');
+
+        render(
+            <TestWrapper>
+                <UserFormTrigger>
+                    <button>Open Modal</button>
+                </UserFormTrigger>
+            </TestWrapper>
+        );
+
+        const triggerButton = screen.getByText('Open Modal');
+        fireEvent.click(triggerButton);
+
+        await waitFor(() => {
+            expect(screen.getByText('Get Started')).toBeInTheDocument();
+        });
+
+        // Close modal by clicking cancel
+        const cancelButton = screen.getByText('Cancel');
+        fireEvent.click(cancelButton);
+
+        // Verify that router.replace was called to remove the query parameter
+        await waitFor(() => {
+            expect(mockReplace).toHaveBeenCalledWith(window.location.pathname);
+        });
+    });
+
+    it('removes openModal query parameter when form is submitted', async () => {
+        // Set up URL with openModal parameter
+        mockSearchParams.set('openModal', 'true');
+
+        render(
+            <TestWrapper>
+                <UserFormTrigger>
+                    <button>Open Modal</button>
+                </UserFormTrigger>
+            </TestWrapper>
+        );
+
+        const triggerButton = screen.getByText('Open Modal');
+        fireEvent.click(triggerButton);
+
+        await waitFor(() => {
+            expect(screen.getByText('Get Started')).toBeInTheDocument();
+        });
+
+        // Fill form fields
+        const usernameInput = screen.getByLabelText('Username');
+        const jobTitleInput = screen.getByLabelText('Job Title');
+
+        fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+        fireEvent.change(jobTitleInput, { target: { value: 'developer' } });
+
+        // Submit form
+        const saveButton = screen.getByText('Save');
+        fireEvent.click(saveButton);
+
+        // Verify that router.replace was called to remove the query parameter
+        await waitFor(() => {
+            expect(mockReplace).toHaveBeenCalledWith(window.location.pathname);
+        });
     });
 });
